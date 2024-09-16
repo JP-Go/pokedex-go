@@ -9,6 +9,9 @@ const (
 	CommandExit = "exit"
 )
 
+type CommandConfig interface {
+	Validate() error
+}
 type CliCommand struct {
 	name        string
 	description string
@@ -45,7 +48,9 @@ func NewCommandHandler() CommandHandler {
 		commands: map[string]CliCommand{},
 	}
 	handler.AddCommandHandler(CommandHelp, "Displays this help text", func() error {
-		return CommandHelpHandler(handler.commands)
+		return CommandHelpHandler(&HelpCommandConfig{
+			commands: handler.commands,
+		})
 	})
 	handler.AddCommandHandler(CommandExit, "Exits the program", CommandExitHandler)
 
