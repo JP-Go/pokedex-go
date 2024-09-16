@@ -2,16 +2,21 @@ package commands
 
 import (
 	"fmt"
+
+	"github.com/JP-Go/pokedex-go/internal/api"
 )
 
 const (
-	CommandHelp = "help"
-	CommandExit = "exit"
+	CommandHelp    = "help"
+	CommandExit    = "exit"
+	CommandMap     = "map"
+	CommandMapBack = "mapb"
 )
 
 type CommandConfig interface {
 	Validate() error
 }
+
 type CliCommand struct {
 	name        string
 	description string
@@ -47,12 +52,24 @@ func NewCommandHandler() CommandHandler {
 	handler := CLICommandHandler{
 		commands: map[string]CliCommand{},
 	}
+	commandMapConfig := CommandMapConfig{
+		Next: api.FirstLocationPage,
+		Prev: "",
+	}
 	handler.AddCommandHandler(CommandHelp, "Displays this help text", func() error {
 		return CommandHelpHandler(&HelpCommandConfig{
 			commands: handler.commands,
 		})
 	})
 	handler.AddCommandHandler(CommandExit, "Exits the program", CommandExitHandler)
+	handler.AddCommandHandler(CommandMap, "Shows next locations on the map", func() error {
+		err := CommandMapHandler(&commandMapConfig, FetchDirectionForward)
+		return err
+	})
+	handler.AddCommandHandler(CommandMapBack, "Shows previous locations on the map", func() error {
+		err := CommandMapHandler(&commandMapConfig, FetchDirectionBackward)
+		return err
+	})
 
 	return &handler
 }
