@@ -10,16 +10,12 @@ const FirstLocationPage = "/location-area/"
 
 var PageLimitReached = errors.New("Page limit reached")
 
-func FetchLocationAreas(url *string) (LocationResponse, error) {
-	if *url == BaseURL {
-		*url = BaseURL + FirstLocationPage
-	}
-
-	if *url == "" {
+func FetchLocationAreas(url string) (LocationResponse, error) {
+	if url == "" {
 		return LocationResponse{}, PageLimitReached
 	}
 
-	res, err := http.Get(*url)
+	res, err := http.Get(url)
 	if err != nil {
 		return LocationResponse{}, err
 	}

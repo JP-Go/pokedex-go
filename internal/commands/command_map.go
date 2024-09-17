@@ -13,14 +13,13 @@ const FetchDirectionForward = "forward"
 const FetchDirectionBackward = "backward"
 
 var ErrorFirstPage = errors.New("Already on the first page")
-var ErrorLastPage = errors.New("Already on the last page")
 
 func CommandMapHandler(config *CliConfig) error {
-	locationRes := api.LocationResponse{}
-	locationRes, err := api.FetchLocationAreas(&config.next)
-	if errors.Is(err, api.PageLimitReached) {
-		return ErrorLastPage
+	if config.next == "" {
+		config.next = api.BaseURL + api.FirstLocationPage
 	}
+	locationRes := api.LocationResponse{}
+	locationRes, err := api.FetchLocationAreas(config.next)
 	if err != nil {
 		return err
 	}
@@ -37,7 +36,7 @@ func CommandMapHandler(config *CliConfig) error {
 
 func CommandMapBHandler(config *CliConfig) error {
 	locationRes := api.LocationResponse{}
-	locationRes, err := api.FetchLocationAreas(&config.previous)
+	locationRes, err := api.FetchLocationAreas(config.previous)
 	if errors.Is(err, api.PageLimitReached) {
 		return ErrorFirstPage
 	}
