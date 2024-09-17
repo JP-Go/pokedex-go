@@ -3,7 +3,7 @@ package commands
 import "fmt"
 
 type HelpCommandConfig struct {
-	commands map[string]CliCommand
+	commands map[string]cliCommand
 }
 
 func (c *HelpCommandConfig) Validate() error {

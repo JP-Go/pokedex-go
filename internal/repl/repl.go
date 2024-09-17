@@ -9,10 +9,10 @@ import (
 	"github.com/JP-Go/pokedex-go/internal/commands"
 )
 
-func StartRepl() {
+func StartRepl(cfg commands.CliConfig) {
 
 	scanner := bufio.NewScanner(os.Stdin)
-	commandHandler := commands.NewCommandHandler()
+	commandHandler := commands.NewCommandHandler(&cfg)
 	for {
 		fmt.Print("Pokedex > ")
 		if scanner.Scan() {

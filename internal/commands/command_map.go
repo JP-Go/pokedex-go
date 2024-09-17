@@ -15,35 +15,11 @@ const FetchDirectionBackward = "backward"
 var ErrorFirstPage = errors.New("Already on the first page")
 var ErrorLastPage = errors.New("Already on the last page")
 
-type CommandMapConfig struct {
-	Next string
-	Prev string
-}
-
-func (c *CommandMapConfig) Validate() error {
-	if c.Next == "" && c.Prev == "" {
-		return errors.New("Invalid config for map command")
-	}
-
-	return nil
-}
-
-func CommandMapHandler(config *CommandMapConfig, cursorDirection cursorDirection) error {
-	err := config.Validate()
-	if err != nil {
-		return err
-	}
+func CommandMapHandler(config *CliConfig) error {
 	locationRes := api.LocationResponse{}
-	if cursorDirection == FetchDirectionForward {
-		locationRes, err = api.FetchLocationAreas(config.Next)
-		if errors.Is(err, api.PageLimitReached) {
-			return ErrorLastPage
-		}
-	} else {
-		locationRes, err = api.FetchLocationAreas(config.Prev)
-		if errors.Is(err, api.PageLimitReached) {
-			return ErrorFirstPage
-		}
+	locationRes, err := api.FetchLocationAreas(&config.next)
+	if errors.Is(err, api.PageLimitReached) {
+		return ErrorLastPage
 	}
 	if err != nil {
 		return err
@@ -54,7 +30,27 @@ func CommandMapHandler(config *CommandMapConfig, cursorDirection cursorDirection
 
 	nextURL, _ := locationRes.Next.(string)
 	prevURL, _ := locationRes.Previous.(string)
-	config.Next = nextURL
-	config.Prev = prevURL
+	config.next = nextURL
+	config.previous = prevURL
+	return nil
+}
+
+func CommandMapBHandler(config *CliConfig) error {
+	locationRes := api.LocationResponse{}
+	locationRes, err := api.FetchLocationAreas(&config.previous)
+	if errors.Is(err, api.PageLimitReached) {
+		return ErrorFirstPage
+	}
+	if err != nil {
+		return err
+	}
+	for _, location := range locationRes.Results {
+		fmt.Println(location.Name)
+	}
+
+	nextURL, _ := locationRes.Next.(string)
+	prevURL, _ := locationRes.Previous.(string)
+	config.next = nextURL
+	config.previous = prevURL
 	return nil
 }
