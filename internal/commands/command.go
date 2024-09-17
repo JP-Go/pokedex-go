@@ -2,8 +2,6 @@ package commands
 
 import (
 	"fmt"
-
-	"github.com/JP-Go/pokedex-go/internal/api"
 )
 
 const (
@@ -49,13 +47,6 @@ func (handler *CLICommandHandler) AddCommandHandler(name, description string, ha
 		name,
 		description,
 		handlerFunc,
-	}
-}
-
-func NewCliConfig() *CliConfig {
-
-	return &CliConfig{
-		next: api.BaseURL + api.FirstLocationPage,
 	}
 }
 
