@@ -6,5 +6,5 @@ import (
 )
 
 func main() {
-	repl.StartRepl(commands.CliConfig{})
+	repl.StartRepl(commands.NewCliConfig())
 }

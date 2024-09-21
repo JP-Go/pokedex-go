@@ -2,6 +2,9 @@ package commands
 
 import (
 	"fmt"
+	"time"
+
+	"github.com/JP-Go/pokedex-go/internal/cache"
 )
 
 const (
@@ -18,6 +21,13 @@ type commandConfig interface {
 type CliConfig struct {
 	next     string
 	previous string
+	cache    *cache.Cache
+}
+
+func NewCliConfig() CliConfig {
+	return CliConfig{
+		cache: cache.NewCache(20 * time.Second),
+	}
 }
 
 type cliCommand struct {

@@ -19,7 +19,7 @@ func CommandMapHandler(config *CliConfig) error {
 		config.next = api.BaseURL + api.FirstLocationPage
 	}
 	locationRes := api.LocationResponse{}
-	locationRes, err := api.FetchLocationAreas(config.next)
+	locationRes, err := api.FetchLocationAreas(config.next, config.cache)
 	if err != nil {
 		return err
 	}
@@ -36,7 +36,7 @@ func CommandMapHandler(config *CliConfig) error {
 
 func CommandMapBHandler(config *CliConfig) error {
 	locationRes := api.LocationResponse{}
-	locationRes, err := api.FetchLocationAreas(config.previous)
+	locationRes, err := api.FetchLocationAreas(config.previous, config.cache)
 	if errors.Is(err, api.PageLimitReached) {
 		return ErrorFirstPage
 	}
