@@ -27,7 +27,7 @@ func StartRepl(cfg commands.CliConfig) {
 				fmt.Printf("Invalid command: %v \n", command)
 				continue
 			}
-			err = handler.Callback()
+			err = handler.Callback(input[1:]...)
 			if err != nil {
 				fmt.Printf("Error with command %s: %v\n", command, err)
 			}
