@@ -24,7 +24,12 @@ type CliConfig struct {
 	cache    *cache.Cache
 }
 
-func NewCliConfig() CliConfig {
+func NewCliConfig(cacheCfg *cache.Cache) CliConfig {
+	if cacheCfg != nil {
+		return CliConfig{
+			cache: cacheCfg,
+		}
+	}
 	return CliConfig{
 		cache: cache.NewCache(20 * time.Second),
 	}
