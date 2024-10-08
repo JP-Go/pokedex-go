@@ -14,12 +14,24 @@ const FetchDirectionBackward = "backward"
 
 var ErrorFirstPage = errors.New("Already on the first page")
 
-func CommandMapHandler(config *CliConfig) error {
-	if config.next == "" {
-		config.next = api.BaseURL + api.FirstLocationPage
+func createMapHandler(config *CliConfig) commandCallback {
+	return func(...string) error {
+		return commandMapHandler(config)
 	}
-	locationRes := api.LocationResponse{}
-	locationRes, err := api.FetchLocationAreas(config.next, config.cache)
+}
+
+func createMapBHandler(config *CliConfig) commandCallback {
+	return func(...string) error {
+		return commandMapBHandler(config)
+	}
+}
+
+func commandMapHandler(config *CliConfig) error {
+	if config.next == "" {
+		config.next = pokeapi.BaseURL + pokeapi.FirstLocationPage
+	}
+	locationRes := pokeapi.LocationResponse{}
+	locationRes, err := pokeapi.FetchLocationAreas(config.next, config.cache)
 	if err != nil {
 		return err
 	}
@@ -34,10 +46,10 @@ func CommandMapHandler(config *CliConfig) error {
 	return nil
 }
 
-func CommandMapBHandler(config *CliConfig) error {
-	locationRes := api.LocationResponse{}
-	locationRes, err := api.FetchLocationAreas(config.previous, config.cache)
-	if errors.Is(err, api.PageLimitReached) {
+func commandMapBHandler(config *CliConfig) error {
+	locationRes := pokeapi.LocationResponse{}
+	locationRes, err := pokeapi.FetchLocationAreas(config.previous, config.cache)
+	if errors.Is(err, pokeapi.PageLimitReached) {
 		return ErrorFirstPage
 	}
 	if err != nil {

@@ -2,7 +2,11 @@ package commands
 
 import "os"
 
-func CommandExitHandler(_args ...string) error {
+func commandExitHandler(_args ...string) error {
 	os.Exit(0)
 	return nil
+}
+
+func createExitHandler() commandCallback {
+	return commandExitHandler
 }
