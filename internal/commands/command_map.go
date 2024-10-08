@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/JP-Go/pokedex-go/internal/api"
+	"github.com/JP-Go/pokedex-go/internal/pokeapi"
 )
 
 type cursorDirection string
