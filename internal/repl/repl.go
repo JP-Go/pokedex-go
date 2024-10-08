@@ -29,7 +29,7 @@ func StartRepl(cfg commands.CliConfig) {
 			}
 			err = handler.Callback(input[1:]...)
 			if err != nil {
-				fmt.Printf("Error with command %s: %v\n", command, err)
+				fmt.Printf("Error: %v\n", err)
 			}
 		}
 	}
