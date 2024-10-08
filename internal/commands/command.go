@@ -12,6 +12,7 @@ const (
 	CommandExit    = "exit"
 	CommandMap     = "map"
 	CommandMapBack = "mapb"
+	CommandExplore = "explore"
 )
 
 type commandCallback = func(arguments ...string) error
@@ -72,6 +73,7 @@ func NewCommandHandler(config *CliConfig) CommandHandler {
 	handler.AddCommandHandler(CommandExit, "Exits the program", createExitHandler())
 	handler.AddCommandHandler(CommandMap, "Shows next locations on the map", createMapHandler(config))
 	handler.AddCommandHandler(CommandMapBack, "Shows previous locations on the map", createMapBHandler(config))
+	handler.AddCommandHandler(CommandExplore, "Displays pokemon encounters available at the location", createExploreHandler(config))
 
 	return &handler
 }
