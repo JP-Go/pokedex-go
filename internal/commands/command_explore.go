@@ -18,6 +18,7 @@ func commandExploreHandler(cliConfig *CliConfig, arguments ...string) error {
 		return errors.New("You must provide a location")
 	}
 	location := arguments[0]
+	cliConfig.currentLocation = location
 	locationInfo, err := pokeapi.FetchLocationArea(location, cliConfig.cache)
 	if err != nil {
 		return err

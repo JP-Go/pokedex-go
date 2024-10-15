@@ -13,14 +13,16 @@ const (
 	CommandMap     = "map"
 	CommandMapBack = "mapb"
 	CommandExplore = "explore"
+	CommandCatch   = "catch"
 )
 
 type commandCallback = func(arguments ...string) error
 
 type CliConfig struct {
-	next     string
-	previous string
-	cache    *cache.Cache
+	next            string
+	previous        string
+	cache           *cache.Cache
+	currentLocation string
 }
 
 type cliCommand struct {
@@ -74,6 +76,7 @@ func NewCommandHandler(config *CliConfig) CommandHandler {
 	handler.AddCommandHandler(CommandMap, "Shows next locations on the map", createMapHandler(config))
 	handler.AddCommandHandler(CommandMapBack, "Shows previous locations on the map", createMapBHandler(config))
 	handler.AddCommandHandler(CommandExplore, "Displays pokemon encounters available at the location", createExploreHandler(config))
+	handler.AddCommandHandler(CommandCatch, "Tries to catch the pokemon in the current area", createCatchCommand(config))
 
 	return &handler
 }
