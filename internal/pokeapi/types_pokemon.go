@@ -3,6 +3,8 @@ package pokeapi
 type PokemonInfo struct {
 	ID             int         `json:"id"`
 	Name           string      `json:"name"`
+	Weight         int         `json:"weight"`
+	Height         int         `json:"Height"`
 	BaseExperience int         `json:"base_experience"`
 	Order          int         `json:"order"`
 	Abilities      []Abilities `json:"abilities"`

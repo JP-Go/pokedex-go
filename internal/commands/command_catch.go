@@ -9,20 +9,18 @@ import (
 )
 
 func createCatchCommand(cliConfig *CliConfig) commandCallback {
-	pokedex := pokeapi.NewPokedex()
-
 	return func(arguments ...string) error {
-		return commandCatchHandler(cliConfig, pokedex, arguments...)
+		return commandCatchHandler(cliConfig, arguments...)
 	}
 }
 
-func commandCatchHandler(cliconfig *CliConfig, pokedex *pokeapi.Pokedex, arguments ...string) error {
+func commandCatchHandler(cliConfig *CliConfig, arguments ...string) error {
 
 	if len(arguments) < 1 {
 		return errors.New("You must provide a pokemon")
 	}
 	pokemon := arguments[0]
-	locationInfo, err := pokeapi.FetchLocationArea(cliconfig.currentLocation, cliconfig.cache)
+	locationInfo, err := pokeapi.FetchLocationArea(cliConfig.currentLocation, cliConfig.cache)
 	if err != nil {
 		return err
 	}
@@ -30,10 +28,10 @@ func commandCatchHandler(cliconfig *CliConfig, pokedex *pokeapi.Pokedex, argumen
 	if !canCatchPokemon(locationInfo, pokemon) {
 		return errors.New(fmt.Sprintf(
 			"Pokemon not found in the current area of %s\n",
-			cliconfig.currentLocation,
+			cliConfig.currentLocation,
 		))
 	}
-	pokemonInfo, err := pokeapi.FetchPokemonInfo(pokemon, cliconfig.cache)
+	pokemonInfo, err := pokeapi.FetchPokemonInfo(pokemon, cliConfig.cache)
 	if err != nil {
 		return err
 	}
@@ -44,8 +42,8 @@ func commandCatchHandler(cliconfig *CliConfig, pokedex *pokeapi.Pokedex, argumen
 		return nil
 	}
 	fmt.Printf("%s was caugth!\n", pokemonInfo.Name)
-	pokedex.AddToPokedex(pokemonInfo)
-	pokedex.GetPokemons()
+	fmt.Println("You can now inspect it with the inspect command.")
+	cliConfig.pokedex.AddToPokedex(pokemonInfo)
 
 	return nil
 }
