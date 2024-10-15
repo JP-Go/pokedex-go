@@ -1,14 +1,18 @@
 package pokeapi
 
-import "fmt"
+import (
+	"maps"
+	"slices"
+)
 
 type Pokedex struct {
 	entries map[string]PokemonInfo
 }
 
 func NewPokedex() *Pokedex {
+	entries := make(map[string]PokemonInfo)
 	return &Pokedex{
-		entries: map[string]PokemonInfo{},
+		entries: entries,
 	}
 }
 
@@ -24,8 +28,7 @@ func (p *Pokedex) GetInfo(pokemon string) (pokemonInfo PokemonInfo, exists bool)
 	return info, true
 }
 
-func (p *Pokedex) GetPokemons() {
-	for pokemon := range p.entries {
-		fmt.Println(" - " + pokemon)
-	}
+func (p *Pokedex) GetPokemons() []string {
+	return slices.Collect(maps.Keys(p.entries))
+
 }
